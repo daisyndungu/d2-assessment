@@ -11,24 +11,20 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-if (process.env.NODE_ENV =='staging'){
-    mongoose.connect(config.staging.DATABASE_URL);
-  }
-  else{
-    mongoose.connect(config.production.DATABASE_URL);
-  }
-  const db = mongoose.connection;
-  const port = process.env.PORT || 8000;
-  
-  db.on('error',function(){
-    console.log('Failed to establish connection');
-    })
-  
-  db.once('open',function(){
-    app.listen(port);
-    console.log('Connection established');
-  });
-  
-  app.use('/api/v1', routes);
-  
-  module.exports = app;
+const env = process.env.NODE_ENV;
+mongoose.connect(config[env].DATABASE_URL);
+const db = mongoose.connection;
+const port = process.env.PORT || 8000;
+
+db.on('error',function(){
+console.log('Failed to establish connection');
+})
+
+db.once('open',function(){
+app.listen(port);
+console.log('Connection established');
+});
+
+app.use('/api/v1', routes);
+
+module.exports = app;
