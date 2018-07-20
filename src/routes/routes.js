@@ -7,5 +7,7 @@ router.get('/', function(req, res) {
     res.status(200).send({ message: 'Welcome to Items API' });
   });
 router.post('/quotes', quote.addNewQuote);
+router.get('/quotes/:id', quote.getQuoteByID);
+router.delete('/quotes/:id', quote.deleteQuoteByID);
 
 module.exports = router;
