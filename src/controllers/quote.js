@@ -36,4 +36,17 @@ function deleteQuoteByID(req, res){
     }
 );
 }
-module.exports = {addNewQuote, getQuoteByID, deleteQuoteByID};
+
+function getAllQuotes(req, res){
+    Quote.find(req.query, (err, quotes) =>{
+        if(err){
+            res.status(500).send({message: err});
+        } else if(quotes.length == 0) {
+            res.status(404).send({message: "quotes not found"});
+        } else {
+            res.status(200).send({message: "quotes found", quotes});
+        }
+    });
+}
+
+module.exports = {addNewQuote, getQuoteByID, deleteQuoteByID, getAllQuotes};
