@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const Quote = new Schema({
     author: {type: String, require: true},
-    year: {type:Date, require: true},
+    year: {type: Number, require: true},
     quote: {type:String, require: true}
     });
 
