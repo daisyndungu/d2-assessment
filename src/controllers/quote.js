@@ -63,4 +63,16 @@ function getAllQuotes(req, res){
     });
 }
 
-module.exports = {addNewQuote, getQuoteByID, deleteQuoteByID, getAllQuotes};
+function updateQuote(req, res){
+    Quote.findByIdAndUpdate({_id: req.params.id}, req.body, (err, quote) => {
+        if(!quote){
+            return res.status(404).send({message: "quote not found"});
+        } else if (err) {
+            return res.status(500).send({message: err});
+        } else{
+            return res.status(200).send({message: "quotes modified"});
+        }
+    });
+}
+
+module.exports = {addNewQuote, getQuoteByID, deleteQuoteByID, getAllQuotes, updateQuote};

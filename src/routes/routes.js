@@ -10,5 +10,6 @@ router.post('/quotes', quote.addNewQuote);
 router.get('/quotes/:id', quote.getQuoteByID);
 router.delete('/quotes/:id', quote.deleteQuoteByID);
 router.get('/quotes', quote.getAllQuotes);
+router.put('/quotes/:id', quote.updateQuote);
 
 module.exports = router;
