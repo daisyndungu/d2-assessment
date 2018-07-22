@@ -6,20 +6,34 @@ function addNewQuote(req, res){
     const quote = new Quote(req.body);
     quote.save((err, quote) => {
         if(err){
-            res.status(500).send(err);
+            return res.status(500).send(err);
         } else {
-            res.status(201).send({message: quote});
+            return res.status(201).send({message: quote});
         }
     });
 }
+function findLongestWord(quote){
+    const quoteArray = quote.split(" ");
+    const longestWord = quoteArray.reduce((word, nextWord) => {
+        if(word.length > nextWord.length){
+            return word;
+        } else {
+            return nextWord;
+        }
+    });
+    return longestWord;
+}
 
 function getQuoteByID(req, res){
-    // const quote = new Quote();
+
     Quote.findById({_id: req.params.id}, (err, quote) => {
         if(err){
             res.status(500).send(err)
+        } else if (quote.length){
+            return res.status(404).send({message: "quote not found"})
         } else {
-            res.status(200).send({message: quote})
+            const longestWord = findLongestWord(quote.quote);
+            return res.status(200).send({message: quote, Longest_word: longestWord, length_of_the_longest_word: longestWord.length});
         }
     });
 }
@@ -27,11 +41,11 @@ function getQuoteByID(req, res){
 function deleteQuoteByID(req, res){
     Quote.findByIdAndRemove({_id: req.params.id}, (err, quote) => {
         if(err){
-            res.status(500).send(err);
+            return res.status(500).send(err);
         } else if(!quote){
-            res.status(404).send({message: "Quote not found"});
+            return res.status(404).send({message: "Quote not found"});
         } else {
-            res.status(200).send({message: "deleted!"});
+            return res.status(200).send({message: "deleted!"});
         }
     }
 );
@@ -40,11 +54,11 @@ function deleteQuoteByID(req, res){
 function getAllQuotes(req, res){
     Quote.find(req.query, (err, quotes) =>{
         if(err){
-            res.status(500).send({message: err});
+            return res.status(500).send({message: err});
         } else if(quotes.length == 0) {
-            res.status(404).send({message: "quotes not found"});
+            return res.status(404).send({message: "quotes not found"});
         } else {
-            res.status(200).send({message: "quotes found", quotes});
+            return res.status(200).send({message: "quotes found", quotes});
         }
     });
 }
